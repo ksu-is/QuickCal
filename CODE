@@ -3,3 +3,18 @@ def calculate_bmr
 
 # Calculates daily calorie and macronutrient needs based on activity level and fitness goals
 def calculate_macros
+
+
+def main():
+    print("Welcome to QuickCal!")
+    # Collects user inputs
+    weight = 
+    height = 
+    age = 
+    gender = 
+    activity level = 
+    goal = 
+
+    # Performs calculations
+
+    # Displays results
