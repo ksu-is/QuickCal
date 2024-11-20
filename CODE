@@ -40,12 +40,12 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) 
 def main():
     print("Welcome to QuickCal!")
     # Collects user inputs
-    weight = 
-    height = 
-    age = 
-    sex = 
-    activity level = 
-    goal = 
+    weight = float(input("Enter your weight in kg): "))
+    height = float(input("Enter your height in cm): "))
+    age = int(input("Enter your age: "))
+    sex = input("Enter your sex (male or female): ")
+    activity level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ")
+    goal = input("Enter your fitness goal (maintain, gain, or lose): ")
 
     # Performs calculations
 
