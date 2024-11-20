@@ -1,1 +1,5 @@
+# Calculates Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
+def calculate_bmr
 
+# Calculates daily calorie and macronutrient needs based on activity level and fitness goals
+def calculate_macros
