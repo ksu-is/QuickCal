@@ -11,17 +11,21 @@ def calculate_bmr(weight: float, height: float, age: int, sex: str) -> float
 # Calculates daily calorie and macronutrient needs based on activity level and fitness goals
 def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) -> dict:
     activity multipliers = {
-        "sedentary":
-        "lightly_active":
-        "moderately_active":
-        "very_active":
-        "extremely_active":
+        "sedentary": 1.2,
+        "lightly_active": 1.375,
+        "moderately_active": 1.55,
+        "very_active": 1.725,
+        "extremely_active": 1.9
     }
+
     goal_adjustments = {
-        "maintain":
-        "gain":
-        "lose":
+        "maintain": 0,
+        "gain": 500,
+        "lose": -500
     }
+
+    daily_calories = 
+
 
 def main():
     print("Welcome to QuickCal!")
