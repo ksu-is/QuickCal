@@ -1,8 +1,8 @@
 # Calculates Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
 def calculate_bmr(weight: float, height: float, age: int, sex: str): 
-    if sex == "male":
+    if sex.lower() == "male":
         return 10 * weight + 6.25 * height - 5 * age + 5
-    elif sex == "female":
+    elif sex.lower() == "female":
         return 10 * weight + 6.25 * height - 5 * age - 161
     else:
         raise ValueError("Invalid sex. Must enter 'male' or 'female'.")
@@ -49,8 +49,8 @@ def main():
     height = float(input("Enter your height in cm: "))
     age = int(input("Enter your age: "))
     sex = input("Enter your sex (male or female): ")
-    activity_level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ")
-    goal = input("Enter your fitness goal (maintain, gain, or lose): ")
+    activity_level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ").strip().lower()
+    goal = input("Enter your fitness goal (maintain, gain, or lose): ").strip().lower()
 
     # Performs calculations
     bmr = calculate_bmr(weight, height, age, sex)
