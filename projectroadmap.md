@@ -5,11 +5,13 @@ Develop QuickCal, a tool that calculates daily calorie and macronutrient needs b
 
 Timeline: 2 weeks
 
-Week 1: Planning and Development
+Week 1 (11/17-11/23): Planning and Development
 * Gather research
 * Backend development
+   * Must add imperial conversions from metric
 * Frontend development
+    
 
-Week 2: Refinement
+Week 2 (11/24-11/30): Refinement
 * Testing and bug fixing
 * Documentation and finalization
