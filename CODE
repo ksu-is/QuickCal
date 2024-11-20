@@ -48,5 +48,12 @@ def main():
     goal = input("Enter your fitness goal (maintain, gain, or lose): ")
 
     # Performs calculations
+    bmr = calculate_bmr(weight, height, age, sex)
+    results = calculate_macros(bmr, weight, activity_level, goal)
 
     # Displays results
+    print("\nYour Daily Needs")
+    print("\nCalories: {results['calories']} kcal")
+    print("\nProtein: {results['protein']} g")
+    print("\nFat: {results['fat']} g")
+    print("\nCarbs: {results['carbs']} g")
