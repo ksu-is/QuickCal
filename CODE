@@ -1,16 +1,16 @@
 # Calculates Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
-def calculate_bmr(weight: float, height: float, age: int, sex: str) -> float
+def calculate_bmr(weight: float, height: float, age: int, sex: str): 
     if sex == "male":
         return 10 * weight + 6.25 * height - 5 * age + 5
     elif sex == "female":
         return 10 * weight + 6.25 * height - 5 * age - 161
     else:
-        raise ValueError("Invalid sex. Must enter 'male' or 'female'")
+        raise ValueError("Invalid sex. Must enter 'male' or 'female'.")
 
 
 # Calculates daily calorie and macronutrient needs based on activity level and fitness goals
-def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) -> dict:
-    activity multipliers = {
+def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str):
+    activity_multipliers = {
         "sedentary": 1.2,
         "lightly_active": 1.375,
         "moderately_active": 1.55,
@@ -23,6 +23,11 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) 
         "gain": 500,
         "lose": -500
     }
+
+    if activity_level not in activity_multipliers:
+        raise ValueError("Invalid activity level entered.")
+    if goal not in goal_adjustments:
+        raise ValueError("Invalid fitness goal entered.")
 
     daily_calories = bmr * activity_multipliers[activity_level] + goal_adjustments[goal]
     protein = weight * 2.2 # 2.2g protein per kg of body weight
@@ -40,11 +45,11 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) 
 def main():
     print("Welcome to QuickCal!")
     # Collects user inputs
-    weight = float(input("Enter your weight in kg): "))
-    height = float(input("Enter your height in cm): "))
+    weight = float(input("Enter your weight in kg: "))
+    height = float(input("Enter your height in cm: "))
     age = int(input("Enter your age: "))
     sex = input("Enter your sex (male or female): ")
-    activity level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ")
+    activity_level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ")
     goal = input("Enter your fitness goal (maintain, gain, or lose): ")
 
     # Performs calculations
@@ -53,7 +58,10 @@ def main():
 
     # Displays results
     print("\nYour Daily Needs")
-    print("\nCalories: {results['calories']} kcal")
-    print("\nProtein: {results['protein']} g")
-    print("\nFat: {results['fat']} g")
-    print("\nCarbs: {results['carbs']} g")
+    print(f"\nCalories: {results['calories']} kcal")
+    print(f"\nProtein: {results['protein']} g")
+    print(f"\nFat: {results['fat']} g")
+    print(f"\nCarbs: {results['carbs']} g")
+
+if __name__ == "__main__":
+    main()
