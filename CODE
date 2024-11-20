@@ -30,10 +30,10 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) 
     carbs = (daily_calories - (protein * 4 + fat * 9)) / 4 # Remaining calories for carbs
 
     return{
-        "calories": 
-        "protein":
-        "fat":
-        "carbs":
+        "calories": round(daily_calories, 2),
+        "protein": round(protein, 2),
+        "fat": round(fat, 2),
+        "carbs": round(carbs, 2)
     }
 
 
