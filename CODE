@@ -24,7 +24,17 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) 
         "lose": -500
     }
 
-    daily_calories = 
+    daily_calories = bmr * activity_multipliers[activity_level] + goal_adjustments[goal]
+    protein = weight * 2.2 # 2.2g protein per kg of body weight
+    fat = 0.3 * daily_calories / 9 # 30% calories from fat
+    carbs = (daily_calories - (protein * 4 + fat * 9)) / 4 # Remaining calories for carbs
+
+    return{
+        "calories": 
+        "protein":
+        "fat":
+        "carbs":
+    }
 
 
 def main():
