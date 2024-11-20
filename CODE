@@ -1,8 +1,15 @@
 # Calculates Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
-def calculate_bmr
+def calculate_bmr(weight: float, height: float, age: int, sex: str) -> float
+    if sex == "male":
+        return 10 * weight + 6.25 * height - 5 * age + 5
+    elif sex == "female":
+        return 10 * weight + 6.25 * height - 5 * age - 161
+    else:
+        raise ValueError("Invalid sex. Must enter 'male' or 'female'")
+
 
 # Calculates daily calorie and macronutrient needs based on activity level and fitness goals
-def calculate_macros
+def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str) -> dict:
 
 
 def main():
@@ -11,10 +18,11 @@ def main():
     weight = 
     height = 
     age = 
-    gender = 
+    sex = 
     activity level = 
     goal = 
 
     # Performs calculations
 
     # Displays results
+
