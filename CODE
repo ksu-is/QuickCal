@@ -1,21 +1,23 @@
-# Calculates Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
-def calculate_bmr(weight: float, height: float, age: int, sex: str): 
-    if sex.lower() == "male":
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+# BMR calculation function
+def calculate_bmr(weight, height, age, gender):
+    if gender.lower() == "male":
         return 10 * weight + 6.25 * height - 5 * age + 5
-    elif sex.lower() == "female":
+    elif gender.lower() == "female":
         return 10 * weight + 6.25 * height - 5 * age - 161
     else:
-        raise ValueError("Invalid sex. Must enter 'male' or 'female'.")
+        raise ValueError("Invalid gender. Enter 'male' or 'female'.")
 
-
-# Calculates daily calorie and macronutrient needs based on activity level and fitness goals
-def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str):
+# Macronutrient calculation function
+def calculate_macros(bmr, weight, activity_level, goal, diet):
     activity_multipliers = {
         "sedentary": 1.2,
-        "lightly_active": 1.375,
-        "moderately_active": 1.55,
-        "very_active": 1.725,
-        "extremely_active": 1.9
+        "lightly active": 1.375,
+        "moderately active": 1.55,
+        "very active": 1.725,
+        "extremely active": 1.9
     }
 
     goal_adjustments = {
@@ -24,44 +26,158 @@ def calculate_macros(bmr: float, weight: float, activity_level: str, goal: str):
         "lose": -500
     }
 
+    diet_macros = {
+        "balanced": {"protein": 0.3, "fat": 0.3, "carbs": 0.4},
+        "low carb": {"protein": 0.4, "fat": 0.4, "carbs": 0.2},
+        "high protein": {"protein": 0.5, "fat": 0.2, "carbs": 0.3},
+        "low fat": {"protein": 0.3, "fat": 0.2, "carbs": 0.5},
+        "high fat": {"protein": 0.25, "fat": 0.5, "carbs": 0.25},
+        "high carb": {"protein": 0.25, "fat": 0.2, "carbs": 0.55},
+        "low protein": {"protein": 0.15, "fat": 0.35, "carbs": 0.5},
+        "keto": {"protein": 0.2, "fat": 0.7, "carbs": 0.1}
+    }
+
     if activity_level not in activity_multipliers:
-        raise ValueError("Invalid activity level entered.")
+        raise ValueError("Invalid activity level.")
     if goal not in goal_adjustments:
-        raise ValueError("Invalid fitness goal entered.")
+        raise ValueError("Invalid fitness goal.")
+    if diet not in diet_macros:
+        raise ValueError("Invalid diet type.")
 
     daily_calories = bmr * activity_multipliers[activity_level] + goal_adjustments[goal]
-    protein = weight * 2.2 # 2.2g protein per kg of body weight
-    fat = 0.3 * daily_calories / 9 # 30% calories from fat
-    carbs = (daily_calories - (protein * 4 + fat * 9)) / 4 # Remaining calories for carbs
+    protein_ratio = diet_macros[diet]["protein"]
+    fat_ratio = diet_macros[diet]["fat"]
+    carb_ratio = diet_macros[diet]["carbs"]
 
-    return{
+    protein = (protein_ratio * daily_calories) / 4  # Protein has 4 kcal/g
+    fat = (fat_ratio * daily_calories) / 9  # Fat has 9 kcal/g
+    carbs = (carb_ratio * daily_calories) / 4  # Carbs have 4 kcal/g
+
+    return {
         "calories": round(daily_calories, 2),
         "protein": round(protein, 2),
         "fat": round(fat, 2),
         "carbs": round(carbs, 2)
     }
 
+# Function to handle GUI calculations
+def calculate():
+    try:
+        weight = float(weight_var.get())
+        height = float(height_var.get())
+        age = int(age_var.get())
+        gender = gender_var.get().strip().lower()
+        activity_level = activity_var.get().strip().lower()
+        goal = goal_var.get().strip().lower()
+        unit_system = unit_var.get()
+        diet = diet_var.get().strip().lower()
 
-def main():
-    print("Welcome to QuickCal!")
-    # Collects user inputs
-    weight = float(input("Enter your weight in kg: "))
-    height = float(input("Enter your height in cm: "))
-    age = int(input("Enter your age: "))
-    sex = input("Enter your sex (male or female): ")
-    activity_level = input("Enter your activity level (sedentary, lightly_active, moderately_active, very_active, extremely_active): ").strip().lower()
-    goal = input("Enter your fitness goal (maintain, gain, or lose): ").strip().lower()
+        # Convert imperial to metric if necessary
+        if unit_system == "imperial":
+            weight = weight * 0.453592  # lbs to kg
+            height = height * 2.54  # inches to cm
 
-    # Performs calculations
-    bmr = calculate_bmr(weight, height, age, sex)
-    results = calculate_macros(bmr, weight, activity_level, goal)
+        bmr = calculate_bmr(weight, height, age, gender)
+        results = calculate_macros(bmr, weight, activity_level, goal, diet)
 
-    # Displays results
-    print("\nYour Daily Needs")
-    print(f"\nCalories: {results['calories']} kcal")
-    print(f"\nProtein: {results['protein']} g")
-    print(f"\nFat: {results['fat']} g")
-    print(f"\nCarbs: {results['carbs']} g")
+        result_label.config(text=(
+            f"Calories: {results['calories']} kcal\n"
+            f"Protein: {results['protein']} g\n"
+            f"Fat: {results['fat']} g\n"
+            f"Carbs: {results['carbs']} g"
+        ))
+    except ValueError as e:
+        messagebox.showerror("Input Error", str(e))
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
-if __name__ == "__main__":
-    main()
+# Function to update labels based on selected unit system
+def update_labels(*args):
+    unit_system = unit_var.get()
+    
+    if unit_system == "imperial":
+        weight_label.config(text="Weight (lbs):")
+        height_label.config(text="Height (inches):")
+    else:
+        weight_label.config(text="Weight (kg):")
+        height_label.config(text="Height (cm):")
+
+# Initialize GUI
+root = tk.Tk()
+root.title("QuickCal - BMR & Macro Calculator")
+root.geometry("500x650")
+root.config(bg="#f5f5f5")  # Light gray background
+
+# Configure the window's style
+style = ttk.Style()
+style.configure('TButton', padding=6, relief="flat", font=("Helvetica", 12, "bold"))
+style.configure('TEntry', padding=6, relief="flat", font=("Helvetica", 12))
+style.configure('TLabel', font=("Helvetica", 12))
+style.configure('TCombobox', padding=6, relief="flat", font=("Helvetica", 12))
+style.configure('TFrame', background="#f5f5f5")
+
+# Input Variables
+weight_var = tk.StringVar()
+height_var = tk.StringVar()
+age_var = tk.StringVar()
+gender_var = tk.StringVar()
+activity_var = tk.StringVar()
+goal_var = tk.StringVar()
+unit_var = tk.StringVar(value="metric")  # Default to metric
+diet_var = tk.StringVar()
+
+# Title Label
+title_label = ttk.Label(root, text="QuickCal: BMR & Macro Calculator", font=("Helvetica", 16, "bold"), anchor="center")
+title_label.grid(row=0, column=0, padx=20, pady=20)
+
+# Create a frame to group inputs
+input_frame = ttk.Frame(root, padding="20", width=450)
+input_frame.grid(row=1, column=0, padx=20, pady=20)
+
+# Create Widgets for Unit System and Gender
+unit_label = ttk.Label(input_frame, text="Unit System:", anchor="w")
+unit_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+unit_menu = ttk.Combobox(input_frame, textvariable=unit_var, values=["metric", "imperial"])
+unit_menu.grid(row=0, column=1, padx=5, pady=5)
+unit_menu.bind("<<ComboboxSelected>>", update_labels)
+
+gender_label = ttk.Label(input_frame, text="Gender:", anchor="w")
+gender_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+gender_menu = ttk.Combobox(input_frame, textvariable=gender_var, values=["Male", "Female"])
+gender_menu.grid(row=1, column=1, padx=5, pady=5)
+gender_menu.set("Male")  # Default selection
+
+# Create Widgets for other inputs
+weight_label = ttk.Label(input_frame, text="Weight (kg):", anchor="w")
+weight_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
+ttk.Entry(input_frame, textvariable=weight_var).grid(row=2, column=1, padx=5, pady=5)
+
+height_label = ttk.Label(input_frame, text="Height (cm):", anchor="w")
+height_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
+ttk.Entry(input_frame, textvariable=height_var).grid(row=3, column=1, padx=5, pady=5)
+
+ttk.Label(input_frame, text="Age:", anchor="w").grid(row=4, column=0, padx=5, pady=5, sticky="w")
+ttk.Entry(input_frame, textvariable=age_var).grid(row=4, column=1, padx=5, pady=5)
+
+ttk.Label(input_frame, text="Activity Level:", anchor="w").grid(row=5, column=0, padx=5, pady=5, sticky="w")
+activity_menu = ttk.Combobox(input_frame, textvariable=activity_var, values=["sedentary", "lightly active", "moderately active", "very active", "extremely active"])
+activity_menu.grid(row=5, column=1, padx=5, pady=5)
+
+ttk.Label(input_frame, text="Goal:", anchor="w").grid(row=6, column=0, padx=5, pady=5, sticky="w")
+goal_menu = ttk.Combobox(input_frame, textvariable=goal_var, values=["maintain", "gain", "lose"])
+goal_menu.grid(row=6, column=1, padx=5, pady=5)
+
+# Diet Type Dropdown
+ttk.Label(input_frame, text="Diet Type:", anchor="w").grid(row=7, column=0, padx=5, pady=5, sticky="w")
+diet_menu = ttk.Combobox(input_frame, textvariable=diet_var, values=["balanced", "low carb", "high protein", "low fat", "high fat", "high carb", "low protein", "keto"])
+diet_menu.grid(row=7, column=1, padx=5, pady=5)
+
+# Calculate Button
+calculate_button = tk.Button(input_frame, text="Calculate", command=calculate, bg="#007BFF", fg="white", font=("Helvetica", 14, "bold"), relief="flat")
+calculate_button.grid(row=8, column=0, columnspan=2, pady=10)
+
+# Results Label
+result_label = ttk.Label(root, text="Results will appear here", padding="10", font=("Helvetica", 14, "bold"), anchor="w")
+result_label.grid(row=2, column=0, padx=20, pady=20)
+
+root.mainloop()
