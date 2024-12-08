@@ -173,7 +173,7 @@ diet_menu = ttk.Combobox(input_frame, textvariable=diet_var, values=["balanced",
 diet_menu.grid(row=7, column=1, padx=5, pady=5)
 
 # Calculate Button
-calculate_button = tk.Button(input_frame, text="Calculate", command=calculate, bg="#007BFF", fg="white", font=("Helvetica", 14, "bold"), relief="flat")
+calculate_button = tk.Button(input_frame, text="Calculate", command=calculate, bg="#007BFF", fg="black", font=("Helvetica", 14, "bold"), relief="flat")
 calculate_button.grid(row=8, column=0, columnspan=2, pady=10)
 
 # Results Label
